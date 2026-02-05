@@ -20,7 +20,7 @@ st.markdown("""
     /* Estilos globales de texto */
     h1, h2, h3, p, li { color: #153244; }
 
-    /* Estilo del INPUT del chat (Caja de escritura) */
+    /* Estilo del INPUT del chat */
     .stChatInput textarea {
         background-color: #ffffff !important;
         color: #153244 !important;
@@ -28,31 +28,36 @@ st.markdown("""
         border-radius: 12px !important;
     }
     
-    /* Burbujas de Chat: USUARIO (Verde muy suave) */
-    [data-testid="stChatMessage"]:nth-child(odd) {
-        background-color: #e8fdfa;
-        border: 1px solid #d0f0ed;
-    }
+    /* CORRECCIÓN DE BURBUJAS:
+       Debido a que el CSS cuenta como primer elemento, el orden se desplaza.
+       Hijo PAR (2, 4, 6...) = USUARIO -> Color Verde
+       Hijo IMPAR (3, 5, 7...) = IA -> Color Blanco
+    */
 
-    /* Burbujas de Chat: IA (Gris muy suave) */
+    /* Burbuja USUARIO (Verde menta más visible) */
     [data-testid="stChatMessage"]:nth-child(even) {
-        background-color: #f8f9fa;
-        border: 1px solid #e9ecef;
+        background-color: #dcf8f6; /* Un verde un poco más intenso */
+        border: 1px solid #c4e4e1;
     }
 
-    /* Color del Avatar (Iconos) */
+    /* Burbuja IA (Blanco puro para contraste) */
+    [data-testid="stChatMessage"]:nth-child(odd) {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+    }
+
+    /* Color de los Avatares (Iconos) - Azul oscuro para ambos para mantener marca */
     .stChatMessage .stChatMessageAvatar {
         background-color: #153244 !important;
         color: white !important;
     }
     
-    /* SOLUCIÓN AL SCROLL HORIZONTAL: Ajuste de texto en bloques de código */
+    /* Ajuste de texto en código */
     code {
         white-space: pre-wrap !important;
         word-break: break-word !important;
     }
 
-    /* Ocultar menú de desarrollador y footer de Streamlit */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     </style>
@@ -236,3 +241,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
