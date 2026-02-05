@@ -28,25 +28,25 @@ st.markdown("""
         border-radius: 12px !important;
     }
     
-    /* CORRECCIÓN DE BURBUJAS:
-       Debido a que el CSS cuenta como primer elemento, el orden se desplaza.
-       Hijo PAR (2, 4, 6...) = USUARIO -> Color Verde
-       Hijo IMPAR (3, 5, 7...) = IA -> Color Blanco
+    /* SOLUCIÓN AL PROBLEMA DE COLORES EN CLOUD:
+       Usamos 'div[data-testid="stChatMessage"]' para ser muy específicos.
+       Usamos '!important' para obligar a Streamlit a respetar el color.
+       Usamos 'nth-of-type' en lugar de 'nth-child' para ignorar elementos ocultos.
     */
 
-    /* Burbuja USUARIO (Verde menta más visible) */
-    [data-testid="stChatMessage"]:nth-child(even) {
-        background-color: #dcf8f6; /* Un verde un poco más intenso */
-        border: 1px solid #c4e4e1;
+    /* USUARIO (Siempre es el 1º, 3º, 5º... mensaje de tipo chat) -> VERDE */
+    div[data-testid="stChatMessage"]:nth-of-type(odd) {
+        background-color: #e8fdfa !important;
+        border: 1px solid #d0f0ed !important;
     }
 
-    /* Burbuja IA (Blanco puro para contraste) */
-    [data-testid="stChatMessage"]:nth-child(odd) {
-        background-color: #ffffff;
-        border: 1px solid #e0e0e0;
+    /* IA (Siempre es el 2º, 4º, 6º... mensaje de tipo chat) -> GRIS/BLANCO */
+    div[data-testid="stChatMessage"]:nth-of-type(even) {
+        background-color: #f8f9fa !important;
+        border: 1px solid #e9ecef !important;
     }
 
-    /* Color de los Avatares (Iconos) - Azul oscuro para ambos para mantener marca */
+    /* Color del Avatar (Iconos) */
     .stChatMessage .stChatMessageAvatar {
         background-color: #153244 !important;
         color: white !important;
@@ -241,4 +241,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
