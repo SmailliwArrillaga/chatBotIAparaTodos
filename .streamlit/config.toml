@@ -1,7 +1,7 @@
 [theme]
 base = "light"
-primaryColor = "#34b3a0"        # Tu verde azulado (para botones y foco)
-backgroundColor = "#ffffff"     # Fondo blanco puro (máximo contraste)
-secondaryBackgroundColor = "#f0f2f6" # Gris muy suave para el sidebar y burbujas de IA
-textColor = "#153244"           # Tu azul oscuro (para el texto, se lee perfecto sobre blanco)
+primaryColor = "#7ECBE2"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F4F1FA"
+textColor = "#153244"
 font = "sans serif"
