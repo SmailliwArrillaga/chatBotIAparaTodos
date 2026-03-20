@@ -184,7 +184,7 @@ def render_sidebar():
         col1, col2 = st.columns([1, 3])
 
         with col1:
-            st.image("C:/Users/admin/OneDrive/Documentos/chatBotIAParaTodos/logo.png", width=60)
+            st.image("logo.png", width=60)
 
         with col2:
             st.markdown("### IA para Todos")
