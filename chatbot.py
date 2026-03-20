@@ -17,51 +17,101 @@ st.set_page_config(
 # ──────────────────────────────────────────────────────────────────────────────
 st.markdown("""
     <style>
-    /* Estilos globales de texto */
-    h1, h2, h3, p, li { color: #153244; }
+    /* Texto general */
+    h1, h2, h3, h4, p, li, label, div {
+        color: #153244;
+    }
 
-    /* Estilo del INPUT del chat */
+    /* Fondo principal */
+    .stApp {
+        background: linear-gradient(135deg, rgba(255,255,255,1) 40%, rgba(184,177,216,0.18) 100%);
+    }
+
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(184,177,216,0.18) 100%);
+        border-right: 1px solid rgba(21, 50, 68, 0.08);
+    }
+
+    /* Input del chat */
     .stChatInput textarea {
         background-color: #ffffff !important;
         color: #153244 !important;
-        border: 2px solid #34b3a0 !important;
-        border-radius: 12px !important;
-    }
-    
-    /* SOLUCIÓN AL PROBLEMA DE COLORES EN CLOUD:
-       Usamos 'div[data-testid="stChatMessage"]' para ser muy específicos.
-       Usamos '!important' para obligar a Streamlit a respetar el color.
-       Usamos 'nth-of-type' en lugar de 'nth-child' para ignorar elementos ocultos.
-    */
-
-    /* USUARIO (Siempre es el 1º, 3º, 5º... mensaje de tipo chat) -> VERDE */
-    div[data-testid="stChatMessage"]:nth-of-type(odd) {
-        background-color: #e8fdfa !important;
-        border: 1px solid #d0f0ed !important;
+        border: 2px solid #7ECBE2 !important;
+        border-radius: 14px !important;
     }
 
-    /* IA (Siempre es el 2º, 4º, 6º... mensaje de tipo chat) -> GRIS/BLANCO */
-    div[data-testid="stChatMessage"]:nth-of-type(even) {
-        background-color: #f8f9fa !important;
-        border: 1px solid #e9ecef !important;
+    .stChatInput textarea:focus {
+        border: 2px solid #B8B1D8 !important;
+        box-shadow: 0 0 0 0.2rem rgba(126, 203, 226, 0.20) !important;
     }
 
-    /* Color del Avatar (Iconos) */
+    /* Burbujas del usuario */
+    [data-testid="stChatMessage"]:nth-child(odd) {
+        background-color: #EEF9FC;
+        border: 1px solid rgba(126, 203, 226, 0.35);
+        border-radius: 16px;
+    }
+
+    /* Burbujas de la IA */
+    [data-testid="stChatMessage"]:nth-child(even) {
+        background-color: #F4F1FA;
+        border: 1px solid rgba(184, 177, 216, 0.45);
+        border-radius: 16px;
+    }
+
+    /* Avatar */
     .stChatMessage .stChatMessageAvatar {
         background-color: #153244 !important;
         color: white !important;
     }
-    
-    /* Ajuste de texto en código */
+
+    /* Botones */
+    .stButton > button {
+        background-color: #7ECBE2 !important;
+        color: #153244 !important;
+        border: none !important;
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+    }
+
+    .stButton > button:hover {
+        background-color: #B8B1D8 !important;
+        color: #153244 !important;
+    }
+
+    /* Selectbox */
+    div[data-baseweb="select"] > div {
+        border-radius: 12px !important;
+        border: 1px solid rgba(21, 50, 68, 0.15) !important;
+    }
+
+    /* Caja info */
+    [data-testid="stAlert"] {
+        border-radius: 14px !important;
+    }
+
+    /* Bloques de código */
     code {
         white-space: pre-wrap !important;
         word-break: break-word !important;
+        color: #153244 !important;
     }
 
+    pre {
+        background-color: #F8FAFC !important;
+        border: 1px solid rgba(126, 203, 226, 0.25) !important;
+        border-radius: 12px !important;
+    }
+
+    /* Ocultar elementos de Streamlit */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    
+    
+    
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 # ──────────────────────────────────────────────────────────────────────────────
 # CONSTANTES Y MAPEOS (CON NOMBRES TÉCNICOS VISIBLES)
@@ -131,12 +181,14 @@ def generar_stream(cliente, modelo, mensajes):
 # ──────────────────────────────────────────────────────────────────────────────
 def render_sidebar():
     with st.sidebar:
-        st.title("🤖 IA para Todos")
-        st.caption("Tu Copiloto de aprendizaje")
-        
-        st.divider()
-        
-        st.markdown("**⚙️ Configuración del 'Cerebro'**")
+        col1, col2 = st.columns([1, 3])
+
+        with col1:
+            st.image("C:/Users/admin/OneDrive/Documentos/chatBotIAParaTodos/logo.png", width=60)
+
+        with col2:
+            st.markdown("### IA para Todos")
+            st.caption("Tu asistente virtual de aprendizaje")
         
         # 1. Selector de Modelo con Tooltip de ayuda (?)
         opcion_modelo = st.selectbox(
@@ -161,33 +213,62 @@ def render_sidebar():
 
         # 4. Biblioteca de Prompts (Ejemplos del Curso)
         st.subheader("📚 Ejercicios por Módulo")
-        
-        with st.expander("📝 Módulo 2: Redacción"):
-            st.markdown("Probá la fórmula **Contexto + Tarea + Detalle**:")
-            
-            st.caption("Ejemplo: Salud y Bienestar")
-            st.code("Actúa como un nutricionista experto (Contexto). Creame un menú semanal de cenas ligeras (Tarea) que incluyan verduras y sean fáciles de cocinar (Detalle).", language="text")
-            
-            st.caption("Ejemplo: Historia para nietos")
-            st.code("Soy abuela y quiero explicarle a mi nieto de 8 años qué fue la Revolución de Mayo. Explicámelo como si fuera un cuento breve y entretenido.", language="text")
 
-        with st.expander("🎨 Módulo 3: Creatividad"):
-            st.markdown("Ideas frescas para jugar y crear:")
-            
-            st.caption("Ejemplo: Decoración")
-            st.code("Tengo un living pequeño con poca luz. Dame 5 ideas de decoración estilo nórdico para que parezca más grande.", language="text")
-            
-            st.caption("Ejemplo: Juego Mental")
-            st.code("Vamos a jugar a 'Adivina el Personaje'. Vos pensá en un personaje histórico y yo te hago preguntas de 'Sí o No'.", language="text")
-        
-        with st.expander("🛡️ Módulo 4: Seguridad"):
-            st.markdown("Detectando trampas y cuidando datos:")
-            
-            st.caption("Ejemplo: Detectar Estafas")
-            st.code("Me llegó un mail diciendo que gané un iPhone y que pague el envío con mi tarjeta. ¿Qué señales debo mirar para saber si es una estafa?", language="text")
-            
-            st.caption("Ejemplo: Cuidar privacidad")
-            st.code("Quiero analizar mis gastos de tarjeta, pero no quiero darte mis datos reales. ¿Cómo puedo pasarte la información de forma segura?", language="text")
+        with st.expander("🧠 Módulo 1: Primer acercamiento a la IA"):
+            st.markdown("""
+            **Practicá tus primeros pasos con IA:**  
+            Explorá qué es, para qué sirve y cómo hacer una primera interacción simple.
+            """)
+            st.caption("Ejemplo 1")
+            st.code("Explicame qué es la inteligencia artificial con ejemplos de la vida cotidiana.", language="text")
+
+            st.caption("Ejemplo 2")
+            st.code("Soy principiante. Decime paso a paso cómo usar un chat de inteligencia artificial por primera vez.", language="text")
+
+            st.caption("Ejemplo 3")
+            st.code("Quiero organizar mejor mi semana. Haceme 3 preguntas para ayudarme a pedirte mejor lo que necesito.", language="text")
+
+        with st.expander("✍️ Módulo 2: Formular pedidos claros"):
+            st.markdown("""
+            **Aprendé a pedir mejor:**  
+            Usá contexto, intención y detalle para obtener respuestas más útiles.
+            """)
+            st.caption("Ejemplo 1")
+            st.code("Actuá como un organizador personal y armame una lista de compras para 4 días con comidas simples y económicas.", language="text")
+
+            st.caption("Ejemplo 2")
+            st.code("Reescribí este mensaje para que sea más amable y claro: 'No voy a poder ir, avisá al resto'.", language="text")
+
+            st.caption("Ejemplo 3")
+            st.code("Explicame paso a paso cómo hacer una receta fácil con arroz, huevo y tomate.", language="text")
+
+        with st.expander("🎨 Módulo 3: Creatividad y entretenimiento"):
+            st.markdown("""
+            **Usá la IA para crear, imaginar y jugar:**  
+            Probá recomendaciones, imágenes, ideas y actividades recreativas.
+            """)
+            st.caption("Ejemplo 1")
+            st.code("Recomendame una película, un libro y una actividad cultural según estos gustos: me gusta el suspenso y las historias reales.", language="text")
+
+            st.caption("Ejemplo 2")
+            st.code("Creame una invitación para un cumpleaños con tono alegre, simple y cercana.", language="text")
+
+            st.caption("Ejemplo 3")
+            st.code("Hagamos una trivia de 5 preguntas fáciles sobre historia argentina.", language="text")
+
+        with st.expander("🛡️ Módulo 4: Seguridad y 'No creas todo'"):
+            st.markdown("""
+            **Aprendé a usar IA con criterio y seguridad:**  
+            Verificá información, detectá errores y cuidá tus datos personales.
+            """)
+            st.caption("Ejemplo 1")
+            st.code("¿Qué señales debo mirar para detectar si un mensaje puede ser una estafa?", language="text")
+
+            st.caption("Ejemplo 2")
+            st.code("Quiero pedir ayuda para analizar mis gastos, pero sin compartir datos sensibles. ¿Cómo puedo hacerlo de forma segura?", language="text")
+
+            st.caption("Ejemplo 3")
+            st.code("Dame una checklist simple para verificar si una respuesta de IA puede estar equivocada.", language="text")
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 4. INTERFAZ: ÁREA PRINCIPAL (CHAT)
@@ -197,49 +278,75 @@ def main():
     cliente = obtener_cliente_groq()
     render_sidebar()
 
-    # PANTALLA DE BIENVENIDA (Cuando no hay mensajes)
+    # PANTALLA DE BIENVENIDA (cuando no hay mensajes)
     if not st.session_state.mensajes:
-        st.title("¡Hola! Tu Copiloto está listo 👩‍✈️")
+        st.title("¡Hola! Tu asistente virtual está listo para ayudarte 👩‍✈️")
         st.markdown("""
-        Bienvenida/o al chat de práctica. Recordá los **3 pilares** del curso:
-        1.  **Pedir bien:** Usá contexto y detalles.
-        2.  **Verificar:** La IA puede "alucinar".
-        3.  **Cuidarte:** Nunca compartas claves, DNI ni datos bancarios.
+        Bienvenida/o al chatbot de la cursada. Recordá los **3 pilares** del curso:
+        1. **Pedir bien:** Usá contexto y detalles.
+        2. **Verificar:** La IA puede "alucinar".
+        3. **Cuidarte:** Nunca compartas claves, DNI ni datos bancarios.
         """)
-        
-        st.markdown("### ¿Por dónde empezamos hoy?")
-        
-        # Tarjetas de sugerencia rápida
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.info("🎂 **Creatividad**\n\n'Dame ideas originales para festejar un cumpleaños de 60...'")
-        with c2:
-            st.success("📝 **Resumen**\n\n'Te paso un texto largo y resumímelo en 3 puntos clave...'")
-        with c3:
-            st.warning("⚖️ **Criterio**\n\n'¿Es verdad que el sol gira alrededor de la tierra? Verificalo.'")
+
+        st.markdown("### 🚀 Empezá a practicar")
+
+        with st.expander("Elegí por dónde empezar (recomendado)", expanded=False):
+
+            c1, c2 = st.columns(2)
+
+            with c1:
+                st.markdown("""
+                **🧠 Entender la IA**  
+                Primeros pasos para usar IA.
+                """)
+
+                st.markdown("""
+                **🎨 Crear con IA**  
+                Generá ideas y contenido.
+                """)
+
+            with c2:
+                st.markdown("""
+                **✍️ Pedir mejor**  
+                Instrucciones claras y efectivas.
+                """)
+
+                st.markdown("""
+                **🛡️ Usar IA con criterio**  
+                Verificar y cuidar datos.
+                """)
 
     # 1. MOSTRAR HISTORIAL DE CHAT
     for mensaje in st.session_state.mensajes:
-        with st.chat_message(mensaje["role"], avatar="👤" if mensaje["role"] == "user" else "🤖"):
+        with st.chat_message(
+            mensaje["role"],
+            avatar="👤" if mensaje["role"] == "user" else "🤖"
+        ):
             st.markdown(mensaje["content"])
 
     # 2. CAMPO DE TEXTO (INPUT)
     if prompt := st.chat_input("Escribí tu consulta aquí..."):
-        # Guardar mensaje usuario
+        # Guardar mensaje del usuario
         st.session_state.mensajes.append({"role": "user", "content": prompt})
+
         with st.chat_message("user", avatar="👤"):
             st.markdown(prompt)
 
         # Generar respuesta IA
         with st.chat_message("assistant", avatar="🤖"):
             respuesta_completa = st.write_stream(
-                generar_stream(cliente, st.session_state.modelo_actual, st.session_state.mensajes)
+                generar_stream(
+                    cliente,
+                    st.session_state.modelo_actual,
+                    st.session_state.mensajes
+                )
             )
-        
+
         # Guardar respuesta IA
-        st.session_state.mensajes.append({"role": "assistant", "content": respuesta_completa})
+        st.session_state.mensajes.append(
+            {"role": "assistant", "content": respuesta_completa}
+        )
+
 
 if __name__ == "__main__":
     main()
-
-
