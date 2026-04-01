@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 # ──────────────────────────────────────────────────────────────────────────────
-# ESTILOS CSS (DEFINITIVOS)
+# ESTILOS CSS
 # ──────────────────────────────────────────────────────────────────────────────
 st.markdown("""
     <style>
@@ -107,23 +107,18 @@ st.markdown("""
     /* Ocultar elementos de Streamlit */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    
-    
-    
     </style>
 """, unsafe_allow_html=True)
 
 # ──────────────────────────────────────────────────────────────────────────────
-# CONSTANTES Y MAPEOS (CON NOMBRES TÉCNICOS VISIBLES)
+# CONSTANTES Y MAPEOS
 # ──────────────────────────────────────────────────────────────────────────────
-# La clave (izquierda) es lo que ve el alumno. El valor (derecha) es el ID técnico.
 MODELOS = {
     "⚡ Rápido (Llama 3.1 8B Instant)": "llama-3.1-8b-instant",
     "🧠 Potente (Llama 3.3 70B Versatile)": "llama-3.3-70b-versatile",
     "✍️ Creativo (Gemma 2 9B IT)": "gemma2-9b-it",
 }
 
-# Descripciones explicativas (Deben coincidir exactamente con las claves de arriba)
 INFO_MODELOS = {
     "⚡ Rápido (Llama 3.1 8B Instant)": "Modelo ligero y veloz de Meta. Ideal para saludos, definiciones simples o cuando necesitás una respuesta inmediata.",
     "🧠 Potente (Llama 3.3 70B Versatile)": "Modelo avanzado de gran capacidad. Usalo para razonamiento complejo, redacción detallada, seguridad o análisis de textos.",
@@ -151,17 +146,16 @@ def inicializar_session_state():
 def generar_stream(cliente, modelo, mensajes):
     """Generador de respuesta con la personalidad del Tutor del Curso."""
     try:
-        # Prompt del Sistema: Define la personalidad del Copiloto (Clara)
         system_prompt = """
-        Sos el asistente oficial del curso 'IA para Todos'. 
-        Tu tono es amable, paciente y motivador (estilo Clara, la mentora del curso).
+        Sos el asistente oficial del curso 'IA para Todos'.
+        Tu tono es amable, paciente y motivador.
         Tus objetivos son:
         1. Ayudar al alumno a redactar mejores prompts (Fórmula: Contexto + Tarea + Detalle).
-        2. Recordarles siempre verificar la información (regla de oro: 'Confiar pero verificar').
-        3. Ayudarles a proteger sus datos sensibles (nunca pedir DNI, claves o tarjetas).
+        2. Recordar siempre verificar la información (regla de oro: 'Confiar pero verificar').
+        3. Ayudar a proteger datos sensibles (nunca pedir DNI, claves o tarjetas).
         No des respuestas técnicas de programación compleja salvo que te lo pidan explícitamente.
         """
-        
+
         stream = cliente.chat.completions.create(
             model=modelo,
             messages=[{"role": "system", "content": system_prompt}] + mensajes,
@@ -189,8 +183,7 @@ def render_sidebar():
         with col2:
             st.markdown("### IA para Todos")
             st.caption("Tu asistente virtual de aprendizaje")
-        
-        # 1. Selector de Modelo con Tooltip de ayuda (?)
+
         opcion_modelo = st.selectbox(
             "Elegí tu modelo:",
             list(MODELOS.keys()),
@@ -198,21 +191,18 @@ def render_sidebar():
             help="Elegí la tecnología detrás del chat:\n\n⚡ Llama 3.1 8B: Rápido y ligero.\n🧠 Llama 3.3 70B: Muy inteligente y detallista.\n✍️ Gemma 2 9B: Creativo y bueno siguiendo instrucciones."
         )
         st.session_state.modelo_actual = MODELOS[opcion_modelo]
-        
-        # 2. Cajita de Información Dinámica
-        st.info(INFO_MODELOS[opcion_modelo], icon="ℹ️")
-        
-        st.write("") # Espacio vacío
 
-        # 3. Botón de Nuevo Chat (Destacado)
+        st.info(INFO_MODELOS[opcion_modelo], icon="ℹ️")
+
+        st.write("")
+
         if st.button("✨ Nuevo Chat (Limpiar Pantalla)", type="primary", use_container_width=True):
             st.session_state.mensajes = []
             st.rerun()
 
         st.divider()
 
-        # 4. Biblioteca de Prompts (Ejemplos del Curso)
-        st.subheader("📚Práctica por módulo")
+        st.subheader("📚 Práctica por módulo")
 
         with st.expander("🧠 Módulo 1: Primer acercamiento a la IA"):
             st.markdown("""
@@ -278,21 +268,31 @@ def main():
     cliente = obtener_cliente_groq()
     render_sidebar()
 
-    # PANTALLA DE BIENVENIDA (cuando no hay mensajes)
     if not st.session_state.mensajes:
-        st.title("👋 Hola, estoy para ayudarte a aprender con IA".
-        "Practicá, explorá y resolvé dudas en cualquier momento")
+        st.title("👋 Hola, estoy para ayudarte a aprender con IA")
+        st.caption("Practicá, explorá y resolvé dudas en cualquier momento")
+
         st.markdown("""
-        Este espacio está pensado para que practiques con inteligencia artificial mientras avanzás en la cursada.
-        **Pedí mejor**: sumá contexto, ejemplos y detalles para obtener mejores respuestas.
-        **Verificá**: la IA puede equivocarse. Contrastá la información.
-        **Cuidá tus datos**: no compartas información personal o sensible.
+        Este espacio está pensado para que practiques con inteligencia artificial mientras avanzás en la cursada.  
+        Tené en cuenta estos **3 principios clave**:
+
+        1. **Pedí mejor:** sumá contexto, ejemplos y detalles para obtener mejores respuestas.  
+        2. **Verificá:** la IA puede equivocarse. Contrastá la información.  
+        3. **Cuidá tus datos:** no compartas información personal o sensible.
         """)
 
-        st.markdown("### 🚀 Empezá a practicar")
+        st.markdown("### 🚀 Empezá a practicar con IA")
+        st.markdown("""
+        Podés usar este chatbot para:
+        - hacer preguntas
+        - probar ideas
+        - resolver actividades
+        - explorar sin miedo
+
+        👉 **No hay respuestas correctas o incorrectas. Es un espacio para aprender haciendo.**
+        """)
 
         with st.expander("👉 Ver actividades sugeridas para empezar", expanded=False):
-
             c1, c2 = st.columns(2)
 
             with c1:
@@ -303,21 +303,20 @@ def main():
 
                 st.markdown("""
                 **🎨 Crear con IA**  
-                Generá ideas y contenido.
+                Generá ideas, textos y contenido creativo.
                 """)
 
             with c2:
                 st.markdown("""
                 **✍️ Pedir mejor**  
-                Instrucciones claras y efectivas.
+                Aprendé a dar instrucciones claras y con contexto.
                 """)
 
                 st.markdown("""
                 **🛡️ Usar IA con criterio**  
-                Verificar y cuidar datos.
+                Verificá información y protegé tus datos.
                 """)
 
-    # 1. MOSTRAR HISTORIAL DE CHAT
     for mensaje in st.session_state.mensajes:
         with st.chat_message(
             mensaje["role"],
@@ -325,15 +324,12 @@ def main():
         ):
             st.markdown(mensaje["content"])
 
-    # 2. CAMPO DE TEXTO (INPUT)
     if prompt := st.chat_input("Escribí tu consulta aquí..."):
-        # Guardar mensaje del usuario
         st.session_state.mensajes.append({"role": "user", "content": prompt})
 
         with st.chat_message("user", avatar="👤"):
             st.markdown(prompt)
 
-        # Generar respuesta IA
         with st.chat_message("assistant", avatar="🤖"):
             respuesta_completa = st.write_stream(
                 generar_stream(
@@ -343,11 +339,9 @@ def main():
                 )
             )
 
-        # Guardar respuesta IA
         st.session_state.mensajes.append(
             {"role": "assistant", "content": respuesta_completa}
         )
-
 
 if __name__ == "__main__":
     main()
