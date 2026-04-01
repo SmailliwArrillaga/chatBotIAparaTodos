@@ -282,22 +282,36 @@ def main():
 
         st.markdown("### 🚀 Empezá a practicar con IA")
 
-        col_izq, col_der = st.columns([1, 1], gap="large")
+        col_izq, col_der = st.columns([1.35, 1], gap="medium")
 
         with col_izq:
             st.markdown("""
             **Podés usar este chatbot para:**
-            - hacer preguntas
-            - probar ideas
-            - resolver actividades
+            - hacer preguntas  
+            - probar ideas  
+            - resolver actividades  
             - explorar sin miedo
             """)
 
         with col_der:
-            st.info("👉 No hay respuestas correctas o incorrectas. Es un espacio para aprender haciendo.")
+            st.markdown("""
+            <div style="
+                background-color:#F4F1FA;
+                border:1px solid rgba(184, 177, 216, 0.45);
+                border-radius:12px;
+                padding:14px 16px;
+                margin-top:6px;
+                color:#153244;
+                font-size:15px;
+                line-height:1.5;
+            ">
+                👉 <b>No hay respuestas correctas o incorrectas.</b><br>
+                Es un espacio para aprender haciendo.
+            </div>
+            """, unsafe_allow_html=True)
 
         with st.expander("👉 Ver actividades sugeridas para empezar", expanded=False):
-            c1, c2 = st.columns(2, gap="large")
+            c1, c2 = st.columns(2, gap="medium")
 
             with c1:
                 st.markdown("""
