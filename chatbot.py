@@ -280,8 +280,8 @@ def main():
 
     # PANTALLA DE BIENVENIDA (cuando no hay mensajes)
     if not st.session_state.mensajes:
-        st.title("👋 Hola, estoy para ayudarte a aprender con IA.
-        Practicá, explorá y resolvé dudas en cualquier momento")
+        st.title("👋 Hola, estoy para ayudarte a aprender con IA".
+        "Practicá, explorá y resolvé dudas en cualquier momento")
         st.markdown("""
         Este espacio está pensado para que practiques con inteligencia artificial mientras avanzás en la cursada.
         **Pedí mejor**: sumá contexto, ejemplos y detalles para obtener mejores respuestas.
