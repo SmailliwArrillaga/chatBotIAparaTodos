@@ -1,6 +1,5 @@
 import streamlit as st
 from groq import Groq
-import os
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 1. CONFIGURACIÓN E INICIALIZACIÓN
