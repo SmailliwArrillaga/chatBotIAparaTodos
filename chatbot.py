@@ -212,7 +212,7 @@ def render_sidebar():
         st.divider()
 
         # 4. Biblioteca de Prompts (Ejemplos del Curso)
-        st.subheader("📚 Ejercicios por Módulo")
+        st.subheader("📚Práctica por módulo")
 
         with st.expander("🧠 Módulo 1: Primer acercamiento a la IA"):
             st.markdown("""
@@ -280,17 +280,18 @@ def main():
 
     # PANTALLA DE BIENVENIDA (cuando no hay mensajes)
     if not st.session_state.mensajes:
-        st.title("¡Hola! Tu asistente virtual está listo para ayudarte 👩‍✈️")
+        st.title("👋 Hola, estoy para ayudarte a aprender con IA.
+        Practicá, explorá y resolvé dudas en cualquier momento")
         st.markdown("""
-        Bienvenida/o al chatbot de la cursada. Recordá los **3 pilares** del curso:
-        1. **Pedir bien:** Usá contexto y detalles.
-        2. **Verificar:** La IA puede "alucinar".
-        3. **Cuidarte:** Nunca compartas claves, DNI ni datos bancarios.
+        Este espacio está pensado para que practiques con inteligencia artificial mientras avanzás en la cursada.
+        **Pedí mejor**: sumá contexto, ejemplos y detalles para obtener mejores respuestas.
+        **Verificá**: la IA puede equivocarse. Contrastá la información.
+        **Cuidá tus datos**: no compartas información personal o sensible.
         """)
 
         st.markdown("### 🚀 Empezá a practicar")
 
-        with st.expander("Elegí por dónde empezar (recomendado)", expanded=False):
+        with st.expander("👉 Ver actividades sugeridas para empezar", expanded=False):
 
             c1, c2 = st.columns(2)
 
