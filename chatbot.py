@@ -267,7 +267,6 @@ def main():
         st.title("👋 Hola, estoy para ayudarte a aprender con IA")
         st.caption("Practicá, explorá y resolvé dudas en cualquier momento")
 
-        # --- AQUÍ ESTÁ LA DIVISIÓN EN DOS COLUMNAS SOLICITADA ---
         col_presentacion_1, col_presentacion_2 = st.columns([1, 1], gap="medium")
 
         with col_presentacion_1:
@@ -278,15 +277,6 @@ def main():
             1. **Pedí mejor:** sumá contexto, ejemplos y detalles para obtener mejores respuestas.  
             2. **Verificá:** la IA puede equivocarse. Contrastá la información.  
             3. **Cuidá tus datos:** no compartas información personal o sensible.
-            """)
-
-            st.markdown("### 🚀 Empezá a practicar con IA")
-            st.markdown("""
-            **Podés usar este chatbot para:**
-            - hacer preguntas  
-            - probar ideas  
-            - resolver actividades  
-            - explorar sin miedo
             """)
 
         with col_presentacion_2:
@@ -305,6 +295,16 @@ def main():
                 Es un espacio para aprender haciendo.
             </div>
             """, unsafe_allow_html=True)
+
+            # --- SECCIÓN MOVIDA A LA DERECHA ---
+            st.markdown("### 🚀 Empezá a practicar con IA")
+            st.markdown("""
+            **Podés usar este chatbot para:**
+            - hacer preguntas  
+            - probar ideas  
+            - resolver actividades  
+            - explorar sin miedo
+            """)
 
             with st.expander("👉 Ver actividades sugeridas para empezar", expanded=False):
                 c1, c2 = st.columns(2, gap="medium")
@@ -326,6 +326,8 @@ def main():
                     st.markdown("""
                     **🛡️ Usar IA con criterio** Verificá información y protegé tus datos.
                     """)
+
+        st.divider()
 
     # --- RENDERIZADO DE MENSAJES Y CHAT ---
     for mensaje in st.session_state.mensajes:
