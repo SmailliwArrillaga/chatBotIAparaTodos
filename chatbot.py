@@ -278,20 +278,7 @@ def main():
             2. **Verificá:** la IA puede equivocarse. Contrastá la información.  
             3. **Cuidá tus datos:** no compartas información personal o sensible.
             """)
-
-        with col_presentacion_2:
-         
-
-            # --- SECCIÓN MOVIDA A LA DERECHA ---
-            st.markdown("### 🚀 Empezá a practicar con IA")
-            st.markdown("""
-            **Podés usar este chatbot para:**
-            - hacer preguntas  
-            - probar ideas  
-            - resolver actividades  
-            - explorar sin miedo
-            """)
-            st.markdown("""
+             st.markdown("""
             <div style="
                 background-color:#F4F1FA;
                 border:1px solid rgba(184, 177, 216, 0.45);
@@ -307,6 +294,18 @@ def main():
             </div>
             """, unsafe_allow_html=True)
 
+        with col_presentacion_2:
+         
+
+            # --- SECCIÓN MOVIDA A LA DERECHA ---
+            st.markdown("### 🚀 Empezá a practicar con IA")
+            st.markdown("""
+            **Podés usar este chatbot para:**
+            - hacer preguntas  
+            - probar ideas  
+            - resolver actividades  
+            - explorar sin miedo
+            """)
 
         st.divider()
 
