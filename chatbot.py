@@ -278,7 +278,7 @@ def main():
             2. **Verificá:** la IA puede equivocarse. Contrastá la información.  
             3. **Cuidá tus datos:** no compartas información personal o sensible.
             """)
-             st.markdown("""
+            st.markdown("""
             <div style="
                 background-color:#F4F1FA;
                 border:1px solid rgba(184, 177, 216, 0.45);
