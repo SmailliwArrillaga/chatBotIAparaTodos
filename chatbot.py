@@ -45,17 +45,19 @@ st.markdown("""
         box-shadow: 0 0 0 0.2rem rgba(126, 203, 226, 0.20) !important;
     }
 
-    /* Burbujas del usuario */
-    [data-testid="stChatMessage"]:nth-child(odd) {
-        background-color: #EEF9FC;
-        border: 1px solid rgba(126, 203, 226, 0.35);
+    /* --- BURBUJAS PERSONALIZADAS POR USUARIO --- */
+
+    /* Burbujas del usuario (Celeste) */
+    [data-testid="stChatMessage"]:has(span[aria-label="user"]) {
+        background-color: #EEF9FC !important;
+        border: 1px solid rgba(126, 203, 226, 0.35) !important;
         border-radius: 16px;
     }
 
-    /* Burbujas de la IA */
-    [data-testid="stChatMessage"]:nth-child(even) {
-        background-color: #F4F1FA;
-        border: 1px solid rgba(184, 177, 216, 0.45);
+    /* Burbujas de la IA (Lila) */
+    [data-testid="stChatMessage"]:has(span[aria-label="assistant"]) {
+        background-color: #F4F1FA !important;
+        border: 1px solid rgba(184, 177, 216, 0.45) !important;
         border-radius: 16px;
     }
 
@@ -295,8 +297,6 @@ def main():
             """, unsafe_allow_html=True)
 
         with col_presentacion_2:
-         
-
             # --- SECCIÓN MOVIDA A LA DERECHA ---
             st.markdown("### 🚀 Empezá a practicar con IA")
             st.markdown("""
