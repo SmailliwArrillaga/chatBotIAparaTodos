@@ -187,77 +187,33 @@ def render_sidebar():
             "Elegí tu modelo:",
             list(MODELOS.keys()),
             index=0,
-            help="Elegí la tecnología detrás del chat:\n\n⚡ Llama 3.1 8B: Rápido y ligero.\n🧠 Llama 3.3 70B: Muy inteligente y detallista.\n✍️ Gemma 2 9B: Creativo y bueno siguiendo instrucciones."
+            help="Elegí la tecnología detrás del chat:\n\n⚡ Llama 3.1 8B: Rápido.\n🧠 Llama 3.3 70B: Inteligente.\n✍️ Gemma 2 9B: Creativo."
         )
         st.session_state.modelo_actual = MODELOS[opcion_modelo]
-
         st.info(INFO_MODELOS[opcion_modelo], icon="ℹ️")
-
-        st.write("")
 
         if st.button("✨ Nuevo Chat (Limpiar Pantalla)", type="primary", use_container_width=True):
             st.session_state.mensajes = []
             st.rerun()
 
         st.divider()
-
         st.subheader("📚 Práctica por módulo")
 
-        with st.expander("🧠 Módulo 1: Primer acercamiento a la IA"):
-            st.markdown("""
-            **Practicá tus primeros pasos con IA:**  
-            Explorá qué es, para qué sirve y cómo hacer una primera interacción simple.
-            """)
-            st.caption("Ejemplo 1")
-            st.code("Explicame qué es la inteligencia artificial con ejemplos de la vida cotidiana.", language="text")
+        with st.expander("🧠 Módulo 1"):
+            st.caption("Ejemplo:")
+            st.code("Explicame qué es la IA con ejemplos cotidianos.", language="text")
 
-            st.caption("Ejemplo 2")
-            st.code("Soy principiante. Decime paso a paso cómo usar un chat de inteligencia artificial por primera vez.", language="text")
+        with st.expander("✍️ Módulo 2"):
+            st.caption("Ejemplo:")
+            st.code("Actuá como un organizador y armame una lista de compras.", language="text")
 
-            st.caption("Ejemplo 3")
-            st.code("Quiero organizar mejor mi semana. Haceme 3 preguntas para ayudarme a pedirte mejor lo que necesito.", language="text")
+        with st.expander("🎨 Módulo 3"):
+            st.caption("Ejemplo:")
+            st.code("Hagamos una trivia de 5 preguntas sobre historia.", language="text")
 
-        with st.expander("✍️ Módulo 2: Formular pedidos claros"):
-            st.markdown("""
-            **Aprendé a pedir mejor:**  
-            Usá contexto, intención y detalle para obtener respuestas más útiles.
-            """)
-            st.caption("Ejemplo 1")
-            st.code("Actuá como un organizador personal y armame una lista de compras para 4 días con comidas simples y económicas.", language="text")
-
-            st.caption("Ejemplo 2")
-            st.code("Reescribí este mensaje para que sea más amable y claro: 'No voy a poder ir, avisá al resto'.", language="text")
-
-            st.caption("Ejemplo 3")
-            st.code("Explicame paso a paso cómo hacer una receta fácil con arroz, huevo y tomate.", language="text")
-
-        with st.expander("🎨 Módulo 3: Creatividad y entretenimiento"):
-            st.markdown("""
-            **Usá la IA para crear, imaginar y jugar:**  
-            Probá recomendaciones, imágenes, ideas y actividades recreativas.
-            """)
-            st.caption("Ejemplo 1")
-            st.code("Recomendame una película, un libro y una actividad cultural según estos gustos: me gusta el suspenso y las historias reales.", language="text")
-
-            st.caption("Ejemplo 2")
-            st.code("Creame una invitación para un cumpleaños con tono alegre, simple y cercana.", language="text")
-
-            st.caption("Ejemplo 3")
-            st.code("Hagamos una trivia de 5 preguntas fáciles sobre historia argentina.", language="text")
-
-        with st.expander("🛡️ Módulo 4: Seguridad y 'No creas todo'"):
-            st.markdown("""
-            **Aprendé a usar IA con criterio y seguridad:**  
-            Verificá información, detectá errores y cuidá tus datos personales.
-            """)
-            st.caption("Ejemplo 1")
-            st.code("¿Qué señales debo mirar para detectar si un mensaje puede ser una estafa?", language="text")
-
-            st.caption("Ejemplo 2")
-            st.code("Quiero pedir ayuda para analizar mis gastos, pero sin compartir datos sensibles. ¿Cómo puedo hacerlo de forma segura?", language="text")
-
-            st.caption("Ejemplo 3")
-            st.code("Dame una checklist simple para verificar si una respuesta de IA puede estar equivocada.", language="text")
+        with st.expander("🛡️ Módulo 4"):
+            st.caption("Ejemplo:")
+            st.code("¿Cómo detectar si un mensaje es una estafa?", language="text")
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 4. INTERFAZ: ÁREA PRINCIPAL (CHAT)
@@ -267,74 +223,34 @@ def main():
     cliente = obtener_cliente_groq()
     render_sidebar()
 
+    # --- CABECERA COMPACTA EN COLUMNAS ---
     if not st.session_state.mensajes:
-        st.title("👋 Hola, estoy para ayudarte a aprender con IA")
-        st.caption("Practicá, explorá y resolvé dudas en cualquier momento")
+        st.title("👋 Hola, aprendamos juntos con IA")
+        
+        col_main_1, col_main_2 = st.columns([1.2, 1], gap="medium")
 
-        st.markdown("""
-        Este espacio está pensado para que practiques con inteligencia artificial mientras avanzás en la cursada.  
-        Tené en cuenta estos **3 principios clave**:
-
-        1. **Pedí mejor:** sumá contexto, ejemplos y detalles para obtener mejores respuestas.  
-        2. **Verificá:** la IA puede equivocarse. Contrastá la información.  
-        3. **Cuidá tus datos:** no compartas información personal o sensible.
-        """)
-
-        st.markdown("### 🚀 Empezá a practicar con IA")
-
-        col_izq, col_der = st.columns([1.35, 1], gap="medium")
-
-        with col_izq:
+        with col_main_1:
             st.markdown("""
-            **Podés usar este chatbot para:**
-            - hacer preguntas  
-            - probar ideas  
-            - resolver actividades  
-            - explorar sin miedo
+            **Principios clave para tu cursada:**
+            * **Pedí mejor:** Sumá contexto y detalles.
+            * **Verificá:** La IA puede equivocarse.
+            * **Cuidá tus datos:** No compartas info sensible.
             """)
 
-        with col_der:
+        with col_main_2:
             st.markdown("""
-            <div style="
-                background-color:#F4F1FA;
-                border:1px solid rgba(184, 177, 216, 0.45);
-                border-radius:12px;
-                padding:14px 16px;
-                margin-top:6px;
-                color:#153244;
-                font-size:15px;
-                line-height:1.5;
-            ">
-                👉 <b>No hay respuestas correctas o incorrectas.</b><br>
-                Es un espacio para aprender haciendo.
+            <div style="background-color:#F4F1FA; border:1px solid rgba(184, 177, 216, 0.45); border-radius:12px; padding:12px; color:#153244; font-size:14px; line-height:1.4;">
+                🚀 <b>Espacio de práctica</b><br>
+                Podés hacer preguntas, probar ideas o resolver actividades. No hay respuestas incorrectas.
             </div>
             """, unsafe_allow_html=True)
+        
+        with st.expander("💡 Ver sugerencias de actividades", expanded=False):
+            st.info("Explorá los ejemplos en la barra lateral 👈 para saber cómo empezar cada módulo.")
 
-        with st.expander("👉 Ver actividades sugeridas para empezar", expanded=False):
-            c1, c2 = st.columns(2, gap="medium")
+        st.divider()
 
-            with c1:
-                st.markdown("""
-                **🧠 Entender la IA**  
-                Primeros pasos para usar IA.
-                """)
-
-                st.markdown("""
-                **🎨 Crear con IA**  
-                Generá ideas, textos y contenido creativo.
-                """)
-
-            with c2:
-                st.markdown("""
-                **✍️ Pedir mejor**  
-                Aprendé a dar instrucciones claras y con contexto.
-                """)
-
-                st.markdown("""
-                **🛡️ Usar IA con criterio**  
-                Verificá información y protegé tus datos.
-                """)
-
+    # --- ÁREA DE CHAT ---
     for mensaje in st.session_state.mensajes:
         with st.chat_message(
             mensaje["role"],
