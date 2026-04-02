@@ -280,6 +280,17 @@ def main():
             """)
 
         with col_presentacion_2:
+         
+
+            # --- SECCIÓN MOVIDA A LA DERECHA ---
+            st.markdown("### 🚀 Empezá a practicar con IA")
+            st.markdown("""
+            **Podés usar este chatbot para:**
+            - hacer preguntas  
+            - probar ideas  
+            - resolver actividades  
+            - explorar sin miedo
+            """)
             st.markdown("""
             <div style="
                 background-color:#F4F1FA;
@@ -296,36 +307,6 @@ def main():
             </div>
             """, unsafe_allow_html=True)
 
-            # --- SECCIÓN MOVIDA A LA DERECHA ---
-            st.markdown("### 🚀 Empezá a practicar con IA")
-            st.markdown("""
-            **Podés usar este chatbot para:**
-            - hacer preguntas  
-            - probar ideas  
-            - resolver actividades  
-            - explorar sin miedo
-            """)
-
-            with st.expander("👉 Ver actividades sugeridas para empezar", expanded=False):
-                c1, c2 = st.columns(2, gap="medium")
-
-                with c1:
-                    st.markdown("""
-                    **🧠 Entender la IA** Primeros pasos para usar IA.
-                    """)
-
-                    st.markdown("""
-                    **🎨 Crear con IA** Generá ideas, textos y contenido creativo.
-                    """)
-
-                with c2:
-                    st.markdown("""
-                    **✍️ Pedir mejor** Aprendé a dar instrucciones claras y con contexto.
-                    """)
-
-                    st.markdown("""
-                    **🛡️ Usar IA con criterio** Verificá información y protegé tus datos.
-                    """)
 
         st.divider()
 
