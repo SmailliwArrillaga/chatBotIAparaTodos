@@ -296,16 +296,6 @@ def main():
             </div>
             """, unsafe_allow_html=True)
 
-        with col_presentacion_2:
-            # --- SECCIÓN MOVIDA A LA DERECHA ---
-            st.markdown("### 🚀 Empezá a practicar con IA")
-            st.markdown("""
-            **Podés usar este chatbot para:**
-            - hacer preguntas  
-            - probar ideas  
-            - resolver actividades  
-            - explorar sin miedo
-            """)
 
         st.divider()
 
