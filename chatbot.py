@@ -123,7 +123,7 @@ MODELOS = {
 INFO_MODELOS = {
     "⚡ Rápido (Llama 3.1 8B Instant)": "Modelo ligero y veloz de Meta. Ideal para saludos, definiciones simples o cuando necesitás una respuesta inmediata.",
     "🧠 Potente (Llama 3.3 70B Versatile)": "Modelo avanzado de gran capacidad. Usalo para razonamiento complejo, redacción detallada, seguridad o análisis de textos.",
-    "🚀 Avanzado (GPT OSS 120B)": "Modelo de lenguaje de gran tamaño optimizado para generación y comprensión de texto. Ideal para conversaciones complejas, programación, razonamiento y asistencia avanzada".
+    "🚀 Avanzado (GPT OSS 120B)": "Modelo de lenguaje de gran tamaño optimizado para generación y comprensión de texto. Ideal para conversaciones complejas, programación, razonamiento y asistencia avanzada."
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
