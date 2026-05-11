@@ -117,7 +117,7 @@ st.markdown("""
 MODELOS = {
     "⚡ Rápido (Llama 3.1 8B Instant)": "llama-3.1-8b-instant",
     "🧠 Potente (Llama 3.3 70B Versatile)": "llama-3.3-70b-versatile",
-    "🚀 Avanzado (GPT OSS 120B": "openai/gpt-oss-120b",
+    "🚀 Avanzado (GPT OSS 120B)": "openai/gpt-oss-120b",
 }
 
 INFO_MODELOS = {
