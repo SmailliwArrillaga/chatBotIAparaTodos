@@ -117,7 +117,7 @@ st.markdown("""
 MODELOS = {
     "⚡ Rápido (Llama 3.1 8B Instant)": "llama-3.1-8b-instant",
     "🧠 Potente (Llama 3.3 70B Versatile)": "llama-3.3-70b-versatile",
-    "✍️ Creativo (Gemma 2 9B IT)": "gemma2-9b-it",
+    "✍️ Creativo (Gemma 2 9B IT)": "openai/gpt-oss-120b",
 }
 
 INFO_MODELOS = {
