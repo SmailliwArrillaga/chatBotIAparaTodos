@@ -115,8 +115,8 @@ st.markdown("""
 # CONSTANTES Y MAPEOS
 # ──────────────────────────────────────────────────────────────────────────────
 MODELOS = {
-    "⚡ Rápido (Llama 3.1 8B Instant)": "llama-3.1-8b-instant",
-    "🧠 Potente (Llama 3.3 70B Versatile)": "llama-3.3-70b-versatile",
+    "⚡ Rápido (GPT OSS 20B)": "openai/gpt-oss-20b",
+    "🧠 Potente (Llama 4 Scout)": "meta-llama/llama-4-scout-17b-16e-instruct",
     "🚀 Avanzado (GPT OSS 120B)": "openai/gpt-oss-120b",
 }
 
