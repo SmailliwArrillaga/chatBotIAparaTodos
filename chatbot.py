@@ -1,4 +1,5 @@
 
+
 import streamlit as st
 from groq import Groq
 
@@ -129,11 +130,12 @@ footer {
 
 
 # ──────────────────────────────────────────────────────────────
-# 3. CONFIGURACIÓN DE MODELOS
+# 3. MODELOS DE INTELIGENCIA ARTIFICIAL
 # ──────────────────────────────────────────────────────────────
 
 # Modelos preferidos.
-# Solo se mostrarán si Groq los devuelve en su catálogo.
+# Se muestran únicamente si están en el catálogo
+# de Groq asociado a la API Key.
 
 MODELOS_PREFERIDOS = {
     "⚡ Rápido (GPT OSS 20B)": "openai/gpt-oss-20b",
@@ -143,16 +145,17 @@ MODELOS_PREFERIDOS = {
 
 INFO_MODELOS = {
     "⚡ Rápido (GPT OSS 20B)": (
-        "Ideal para consultas cotidianas, "
+        "Modelo ágil para consultas cotidianas, "
         "preguntas frecuentes y explicaciones sencillas."
     ),
     "🧠 Potente (GPT OSS 120B)": (
-        "Recomendado para explicaciones detalladas, "
-        "análisis y tareas de mayor complejidad."
+        "Modelo de mayor capacidad, recomendado "
+        "para explicaciones detalladas, análisis "
+        "y resolución de problemas complejos."
     ),
     "🚀 Avanzado (Qwen 3 32B)": (
-        "Alternativa para razonamiento, programación "
-        "y resolución de problemas."
+        "Modelo alternativo orientado al razonamiento, "
+        "programación y resolución de problemas."
     ),
 }
 
@@ -162,14 +165,13 @@ INFO_MODELOS = {
 # ──────────────────────────────────────────────────────────────
 
 def obtener_cliente_groq():
-    """Crea el cliente utilizando Streamlit Secrets."""
 
     api_key = st.secrets.get("clave_api")
 
     if not api_key:
         st.error(
             "⚠️ No se encontró la API Key de Groq. "
-            "Verificá la configuración de Streamlit Secrets."
+            "Verificá los secretos de Streamlit."
         )
         st.stop()
 
@@ -178,11 +180,6 @@ def obtener_cliente_groq():
 
 @st.cache_data(ttl=300, show_spinner=False)
 def consultar_modelos_disponibles(api_key):
-    """
-    Consulta el catálogo de modelos de Groq.
-
-    La disponibilidad puede variar según la cuenta.
-    """
 
     cliente = Groq(api_key=api_key)
 
@@ -196,19 +193,18 @@ def consultar_modelos_disponibles(api_key):
 
 
 def construir_selector_modelos(disponibles):
-    """
-    Construye el selector con modelos presentes
-    en el catálogo de Groq.
-    """
 
     modelos = {}
 
-    # Primero, los modelos preferidos.
+    # Incorporar modelos preferidos disponibles.
+
     for nombre, identificador in MODELOS_PREFERIDOS.items():
+
         if identificador in disponibles:
             modelos[nombre] = identificador
 
-    # Si hay menos de tres, ofrecer alternativas.
+    # Completar hasta tres opciones si es necesario.
+
     if len(modelos) < 3:
 
         usados = set(modelos.values())
@@ -225,7 +221,6 @@ def construir_selector_modelos(disponibles):
             and "tts" not in identificador.lower()
             and "transcription" not in identificador.lower()
             and "compound" not in identificador.lower()
-            and "prompt-guard" not in identificador.lower()
         ]
 
         for identificador in alternativas:
@@ -254,20 +249,22 @@ def inicializar_session_state():
 
 
 # ──────────────────────────────────────────────────────────────
-# 6. GENERACIÓN DE RESPUESTAS
+# 6. PERSONALIDAD DEL ASISTENTE
 # ──────────────────────────────────────────────────────────────
 
 SYSTEM_PROMPT = """
-Sos el asistente oficial del curso 'IA para Todos'.
+Sos IA para Todos, un asistente virtual educativo
+diseñado para acompañar a personas que están
+aprendiendo inteligencia artificial.
 
 Tu tono es amable, paciente, motivador y claro.
 
-Tu público está formado por personas que están
-aprendiendo a utilizar inteligencia artificial.
+Tu público está formado por personas principiantes
+que desean aprender a utilizar herramientas de IA.
 
 Tus objetivos son:
 
-1. Ayudar al alumno a redactar mejores prompts.
+1. Ayudar al estudiante a redactar mejores prompts.
    Fórmula: Contexto + Tarea + Detalle.
 
 2. Recordar la importancia de verificar información.
@@ -293,24 +290,49 @@ Tus objetivos son:
 10. Respondé en español claro, preferentemente
     utilizando expresiones habituales de Argentina.
 
+IDENTIDAD DEL ASISTENTE:
+
+Tu nombre es IA para Todos.
+
+Funcionás mediante modelos de inteligencia
+artificial accesibles a través de Groq.
+
+No afirmes que sos ChatGPT, GPT-4 u otro modelo
+si esa información no corresponde al modelo activo.
+
+Cuando te pregunten qué modelo sos,
+indicá el identificador del modelo activo
+proporcionado en estas instrucciones.
+
+No inventes versiones ni características técnicas.
+
 Tu propósito es acompañar el aprendizaje,
 no reemplazar el pensamiento del estudiante.
 """
 
 
+# ──────────────────────────────────────────────────────────────
+# 7. GENERACIÓN DE RESPUESTAS
+# ──────────────────────────────────────────────────────────────
+
 def generar_stream(cliente, modelo, mensajes):
-    """
-    Genera respuestas en streaming desde Groq.
-    """
 
     try:
+
+        prompt_modelo = (
+            SYSTEM_PROMPT
+            + "\n\nMODELO ACTIVO: "
+            + modelo
+            + "\nSi preguntan qué modelo utilizás, "
+            + "respondé con este identificador exacto."
+        )
 
         stream = cliente.chat.completions.create(
             model=modelo,
             messages=[
                 {
                     "role": "system",
-                    "content": SYSTEM_PROMPT
+                    "content": prompt_modelo
                 }
             ] + mensajes,
             temperature=0.6,
@@ -337,14 +359,14 @@ def generar_stream(cliente, modelo, mensajes):
             or "does not exist" in mensaje_error
         ):
             raise RuntimeError(
-                "El modelo seleccionado no está disponible "
-                "para esta cuenta. Elegí otro modelo."
+                "El modelo seleccionado no está disponible. "
+                "Elegí otro modelo desde la barra lateral."
             ) from e
 
-        if "rate_limit" in mensaje_error or "429" in mensaje_error:
+        if "429" in mensaje_error:
             raise RuntimeError(
-                "Se alcanzó temporalmente el límite de "
-                "solicitudes de Groq. Intentá nuevamente."
+                "Se alcanzó temporalmente el límite "
+                "de solicitudes. Intentá nuevamente."
             ) from e
 
         if "401" in mensaje_error:
@@ -354,15 +376,15 @@ def generar_stream(cliente, modelo, mensajes):
 
         raise RuntimeError(
             "No se pudo completar la respuesta. "
-            "Revisá la conexión o intentá nuevamente."
+            "Intentá nuevamente."
         ) from e
 
 
 # ──────────────────────────────────────────────────────────────
-# 7. BARRA LATERAL
+# 8. BARRA LATERAL
 # ──────────────────────────────────────────────────────────────
 
-def render_sidebar(modelos, disponibles):
+def render_sidebar(modelos):
 
     with st.sidebar:
 
@@ -377,21 +399,15 @@ def render_sidebar(modelos, disponibles):
                 "Tu asistente virtual de aprendizaje"
             )
 
-        st.divider()
-
-        # Selector dinámico de modelos
-
-        st.subheader("🤖 Modelo de inteligencia artificial")
+        # Selector de modelos
 
         opcion_modelo = st.selectbox(
             "Elegí tu modelo:",
             options=list(modelos.keys()),
             index=0,
             help=(
-                "Los modelos se obtienen del catálogo "
-                "de Groq para tu API Key. "
-                "Su aparición no garantiza que "
-                "todas las solicitudes sean admitidas."
+                "Seleccioná el modelo de inteligencia "
+                "artificial que querés utilizar."
             )
         )
 
@@ -401,35 +417,18 @@ def render_sidebar(modelos, disponibles):
 
         descripcion = INFO_MODELOS.get(
             opcion_modelo,
-            (
-                "Modelo disponible en el catálogo de Groq. "
-                "Podés probarlo para conversar y aprender."
-            )
+            "Elegí el modelo que mejor se adapte "
+            "a tu consulta."
         )
 
-        st.info(descripcion, icon="ℹ️")
-
-        # Diagnóstico
-
-        with st.expander("🔍 Modelos disponibles en Groq"):
-
-            st.caption(
-                "Estos son los identificadores que "
-                "devuelve Groq para tu cuenta."
-            )
-
-            st.code(
-                "\n".join(disponibles),
-                language="text"
-            )
-
-            if st.button("🔄 Actualizar catálogo"):
-                consultar_modelos_disponibles.clear()
-                st.rerun()
+        st.info(
+            descripcion,
+            icon="ℹ️"
+        )
 
         st.write("")
 
-        # Nuevo chat
+        # Botón nuevo chat
 
         if st.button(
             "✨ Nuevo Chat (Limpiar Pantalla)",
@@ -459,6 +458,7 @@ una primera interacción simple.
 """)
 
             st.caption("Ejemplo 1")
+
             st.code(
                 "Explicame qué es la inteligencia "
                 "artificial con ejemplos de la vida cotidiana.",
@@ -466,6 +466,7 @@ una primera interacción simple.
             )
 
             st.caption("Ejemplo 2")
+
             st.code(
                 "Soy principiante. Decime paso a paso "
                 "cómo usar un chat de inteligencia "
@@ -474,6 +475,7 @@ una primera interacción simple.
             )
 
             st.caption("Ejemplo 3")
+
             st.code(
                 "Quiero organizar mejor mi semana. "
                 "Haceme 3 preguntas para ayudarme "
@@ -497,6 +499,7 @@ obtener respuestas más útiles.
 """)
 
             st.caption("Ejemplo 1")
+
             st.code(
                 "Actuá como un organizador personal "
                 "y armame una lista de compras para "
@@ -505,6 +508,7 @@ obtener respuestas más útiles.
             )
 
             st.caption("Ejemplo 2")
+
             st.code(
                 "Reescribí este mensaje para que "
                 "sea más amable y claro: "
@@ -513,6 +517,7 @@ obtener respuestas más útiles.
             )
 
             st.caption("Ejemplo 3")
+
             st.code(
                 "Explicame paso a paso cómo hacer "
                 "una receta fácil con arroz, "
@@ -536,6 +541,7 @@ actividades recreativas.
 """)
 
             st.caption("Ejemplo 1")
+
             st.code(
                 "Recomendame una película, un libro "
                 "y una actividad cultural según estos "
@@ -545,6 +551,7 @@ actividades recreativas.
             )
 
             st.caption("Ejemplo 2")
+
             st.code(
                 "Creame una invitación para un "
                 "cumpleaños con tono alegre, "
@@ -553,6 +560,7 @@ actividades recreativas.
             )
 
             st.caption("Ejemplo 3")
+
             st.code(
                 "Hagamos una trivia de 5 preguntas "
                 "fáciles sobre historia argentina.",
@@ -575,6 +583,7 @@ y cuidá tus datos personales.
 """)
 
             st.caption("Ejemplo 1")
+
             st.code(
                 "¿Qué señales debo mirar para "
                 "detectar si un mensaje puede "
@@ -583,6 +592,7 @@ y cuidá tus datos personales.
             )
 
             st.caption("Ejemplo 2")
+
             st.code(
                 "Quiero pedir ayuda para analizar "
                 "mis gastos, pero sin compartir "
@@ -592,6 +602,7 @@ y cuidá tus datos personales.
             )
 
             st.caption("Ejemplo 3")
+
             st.code(
                 "Dame una checklist simple para "
                 "verificar si una respuesta de IA "
@@ -601,7 +612,7 @@ y cuidá tus datos personales.
 
 
 # ──────────────────────────────────────────────────────────────
-# 8. PANTALLA DE BIENVENIDA
+# 9. PANTALLA DE BIENVENIDA
 # ──────────────────────────────────────────────────────────────
 
 def render_bienvenida():
@@ -660,7 +671,7 @@ Tené en cuenta estos **3 principios clave**:
 
 
 # ──────────────────────────────────────────────────────────────
-# 9. ÁREA PRINCIPAL DEL CHAT
+# 10. ÁREA PRINCIPAL DEL CHAT
 # ──────────────────────────────────────────────────────────────
 
 def main():
@@ -669,7 +680,7 @@ def main():
 
     cliente = obtener_cliente_groq()
 
-    # Consultar modelos de Groq
+    # Consultar modelos disponibles
 
     try:
 
@@ -682,14 +693,14 @@ def main():
     except Exception:
 
         st.error(
-            "❌ No fue posible consultar los modelos "
-            "de Groq. Verificá la API Key, la conexión "
-            "y los permisos de tu cuenta."
+            "❌ No fue posible conectar con Groq. "
+            "Verificá la API Key y los permisos "
+            "de tu cuenta."
         )
 
         st.stop()
 
-    # Construir selector
+    # Preparar modelos
 
     modelos = construir_selector_modelos(
         disponibles
@@ -699,31 +710,21 @@ def main():
 
         st.error(
             "❌ No se encontraron modelos de chat "
-            "compatibles entre las opciones conocidas. "
-            "Revisá el catálogo y los permisos en Groq."
+            "entre las opciones disponibles."
         )
-
-        with st.expander("Ver catálogo recibido"):
-            st.code(
-                "\n".join(disponibles),
-                language="text"
-            )
 
         st.stop()
 
-    # Barra lateral
+    # Mostrar barra lateral
 
-    render_sidebar(
-        modelos,
-        disponibles
-    )
+    render_sidebar(modelos)
 
-    # Pantalla de bienvenida
+    # Pantalla inicial
 
     if not st.session_state.mensajes:
         render_bienvenida()
 
-    # Mostrar historial
+    # Historial de conversación
 
     for mensaje in st.session_state.mensajes:
 
@@ -789,16 +790,15 @@ def main():
 
                 st.info(
                     "Probá seleccionar otro modelo "
-                    "desde la barra lateral. "
-                    "También podés actualizar "
-                    "el catálogo de Groq."
+                    "desde la barra lateral."
                 )
 
 
 # ──────────────────────────────────────────────────────────────
-# 10. EJECUCIÓN
+# 11. EJECUCIÓN
 # ──────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     main()
+
 
