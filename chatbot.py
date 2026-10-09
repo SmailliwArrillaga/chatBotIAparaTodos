@@ -116,14 +116,23 @@ st.markdown("""
 # ──────────────────────────────────────────────────────────────────────────────
 MODELOS = {
     "⚡ Rápido (GPT OSS 20B)": "openai/gpt-oss-20b",
-    "🧠 Potente (Llama 4 Scout)": "meta-llama/llama-4-scout-17b-16e-instruct",
-    "🚀 Avanzado (GPT OSS 120B)": "openai/gpt-oss-120b",
+    "🧠 Potente (GPT OSS 120B)": "openai/gpt-oss-120b",
+    "🚀 Avanzado (Qwen 3 32B)": "qwen/qwen3-32b",
 }
 
 INFO_MODELOS = {
-    "⚡ Rápido (GPT OSS 20B)": "Ideal para consultas rápidas, preguntas frecuentes y conversaciones cotidianas.",
-    "🧠 Potente (Llama 4 Scout)": "Una alternativa para conversaciones, análisis y explicaciones detalladas (sujeta a disponibilidad en Groq).",
-    "🚀 Avanzado (GPT OSS 120B)": "Recomendado para razonamiento complejo, programación y tareas avanzadas."
+    "⚡ Rápido (GPT OSS 20B)": (
+        "Ideal para consultas rápidas, preguntas frecuentes "
+        "y conversaciones cotidianas."
+    ),
+    "🧠 Potente (GPT OSS 120B)": (
+        "Recomendado para explicaciones detalladas, "
+        "análisis y tareas complejas."
+    ),
+    "🚀 Avanzado (Qwen 3 32B)": (
+        "Alternativa para razonamiento, programación "
+        "y resolución de problemas."
+    ),
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
