@@ -121,9 +121,9 @@ MODELOS = {
 }
 
 INFO_MODELOS = {
-    "⚡ Rápido (Llama 3.1 8B Instant)": "Modelo ligero y veloz de Meta. Ideal para saludos, definiciones simples o cuando necesitás una respuesta inmediata.",
-    "🧠 Potente (Llama 3.3 70B Versatile)": "Modelo avanzado de gran capacidad. Usalo para razonamiento complejo, redacción detallada, seguridad o análisis de textos.",
-    "🚀 Avanzado (GPT OSS 120B)": "Modelo de lenguaje de gran tamaño optimizado para generación y comprensión de texto. Ideal para conversaciones complejas, programación, razonamiento y asistencia avanzada."
+    "⚡ Rápido (GPT OSS 20B)": "Ideal para consultas rápidas, preguntas frecuentes y conversaciones cotidianas.",
+    "🧠 Potente (Llama 4 Scout)": "Una alternativa para conversaciones, análisis y explicaciones detalladas (sujeta a disponibilidad en Groq).",
+    "🚀 Avanzado (GPT OSS 120B)": "Recomendado para razonamiento complejo, programación y tareas avanzadas."
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -189,11 +189,11 @@ def render_sidebar():
             "Elegí tu modelo:",
             list(MODELOS.keys()),
             index=0,
-            help="Elegí la tecnología detrás del chat:\n\n⚡ Llama 3.1 8B: Rápido y ligero.\n🧠 Llama 3.3 70B: Muy inteligente y detallista.\n✍️ Gemma 2 9B: Creativo y bueno siguiendo instrucciones."
+            help="⚡ GPT OSS 20B: consultas rápidas.\n🧠 Llama 4 Scout: tareas variadas (según disponibilidad).\n🚀 GPT OSS 120B: razonamiento avanzado."
         )
         st.session_state.modelo_actual = MODELOS[opcion_modelo]
 
-        st.info(INFO_MODELOS[opcion_modelo], icon="ℹ️")
+        st.info(INFO_MODELOS.get(opcion_modelo, "Modelo seleccionado."), icon="ℹ️")
 
         st.write("")
 
